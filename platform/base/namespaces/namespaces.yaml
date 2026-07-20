@@ -1,0 +1,16 @@
+# Keep namespaces explicit in Git so their ownership, labels, and future policies
+# are managed intentionally instead of relying only on Argo CD auto-creation.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-dns
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd-image-updater
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: boutique-lite-dev

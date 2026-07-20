@@ -1,0 +1,15 @@
+project_name        = "minimized-devops"
+environment         = "dev"
+aws_region          = "us-east-1"
+create_route53_zone = true
+route53_zone_name   = "example.com"
+
+create_acm_certificate  = true
+certificate_domain_name = "example.com"
+certificate_subject_alternative_names = [
+  "*.example.com"
+]
+
+tags = {
+  Owner = "your-name"
+}
