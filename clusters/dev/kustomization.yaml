@@ -2,7 +2,7 @@
 kind: Kustomization
 
 resources:
-- ../../argocd/project-platform.yaml
+  - ../../argocd/project-platform.yaml
   - ../../argocd/project-apps.yaml
   - ../../argocd/platform-dev.yaml
   - ../../argocd/boutique-lite-dev.yaml

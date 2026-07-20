@@ -16,7 +16,7 @@ spec:
         policy: upsert-only
         txtOwnerId: dev
         domainFilters:
-          - example.com
+          - waeltarabishi-devops.online
         sources:
           - service
           - ingress

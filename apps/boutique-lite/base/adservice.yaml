@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adservice
+  labels:
+    app.kubernetes.io/name: adservice
+    app.kubernetes.io/part-of: boutique-lite
+spec:
+  selector:
+    app.kubernetes.io/name: adservice
+  ports:
+    - name: grpc
+      port: 9555
+      targetPort: grpc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adservice
+  labels:
+    app.kubernetes.io/name: adservice
+    app.kubernetes.io/part-of: boutique-lite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: adservice
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: adservice
+        app.kubernetes.io/part-of: boutique-lite
+    spec:
+      containers:
+        - name: adservice
+          image: boutique-lite/adservice:latest
+          env:
+            - name: PORT
+              value: "9555"
+            - name: DISABLE_STATS
+              value: "1"
+            - name: DISABLE_TRACING
+              value: "1"
+          ports:
+            - name: grpc
+              containerPort: 9555
+          readinessProbe:
+            grpc:
+              port: 9555
+          livenessProbe:
+            grpc:
+              port: 9555
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
