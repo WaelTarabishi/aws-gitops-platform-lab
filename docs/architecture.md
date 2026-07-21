@@ -22,7 +22,7 @@ Terraform creates and updates cloud infrastructure such as:
 
 ### Argo CD
 Argo CD watches this repository and applies:
-- platform add-ons
+- platform add-ons (Platform)
 - application overlays
 
 ### Kustomize
