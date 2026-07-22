@@ -4,15 +4,13 @@ metadata:
   name: aws-load-balancer-controller
   namespace: argocd
 spec:
-  project: platform
   source:
-    repoURL: https://aws.github.io/eks-charts
-    chart: aws-load-balancer-controller
-    targetRevision: 3.2.2
     helm:
+      skipCrds: true
       values: |
         clusterName: minimized-devops-dev-eks
         region: us-east-1
+        vpcId: vpc-0a0d1d7863ba3c5a5
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
