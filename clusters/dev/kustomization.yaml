@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - gateway-api-crds
-  - ../../argocd/project-platform.yaml
-  - ../../argocd/project-apps.yaml
-  - ../../argocd/platform-dev.yaml
-  - ../../argocd/boutique-lite-dev.yaml
+  - project-platform.yaml
+  - project-apps.yaml
+  - platform-dev.yaml
+  - boutique-lite-dev.yaml

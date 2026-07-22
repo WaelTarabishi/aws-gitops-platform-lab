@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - ../../base/namespaces
   - ../../base/aws-load-balancer-controller
+  - ../../base/argocd-route
   - ../../base/external-dns
   - ../../base/public-gateway

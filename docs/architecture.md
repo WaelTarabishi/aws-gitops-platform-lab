@@ -57,5 +57,5 @@ The practical bootstrap sequence is:
 
 ## Current Dev Baseline
 
-The current `dev` baseline bootstraps Gateway API CRDs from the cluster entrypoint, installs the AWS Load Balancer Controller in the platform layer, and exposes the sample application through an `HTTPRoute`.
+The current `dev` baseline bootstraps Gateway API CRDs from the cluster entrypoint, installs the AWS Load Balancer Controller in the platform layer, and exposes both the sample application and the Argo CD server through `HTTPRoute` resources.
 The first routing step is public HTTP so the gateway can be stood up before wiring a certificate ARN into the Git-managed manifests for HTTPS.
