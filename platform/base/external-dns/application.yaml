@@ -13,6 +13,9 @@ spec:
       values: |
         provider:
           name: aws
+        serviceAccount:
+          create: true
+          name: external-dns
         policy: upsert-only
         txtOwnerId: dev
         domainFilters:
@@ -20,6 +23,7 @@ spec:
         sources:
           - service
           - ingress
+          - gateway-httproute
   destination:
     server: https://kubernetes.default.svc
     namespace: external-dns

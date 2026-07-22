@@ -32,10 +32,10 @@ Kustomize is the source of truth for our own workloads and environment compositi
 
 Version 1:
 - namespaces
-- ExternalDNS
-- Argo CD Image Updater
 
 Version 2:
+- AWS Load Balancer Controller
+- ExternalDNS
 - Gateway API and ALB routing resources
 - monitoring
 
@@ -50,6 +50,5 @@ That root application then creates the platform and application child applicatio
 
 ## Current Dev Baseline
 
-The current `dev` baseline intentionally does not attach the sample application to Gateway API yet.
-That avoids coupling the first application sync to controller and CRD installation order.
-HTTPRoute resources should be introduced in the AWS routing phase after the gateway layer is in place.
+The current `dev` baseline bootstraps Gateway API CRDs from the cluster entrypoint, installs the AWS Load Balancer Controller in the platform layer, and exposes the sample application through an `HTTPRoute`.
+The first routing step is public HTTP so the gateway can be stood up before wiring a certificate ARN into the Git-managed manifests for HTTPS.

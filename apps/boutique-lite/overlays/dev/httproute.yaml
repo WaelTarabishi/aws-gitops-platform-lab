@@ -8,6 +8,7 @@ spec:
   parentRefs:
     - name: public-gateway
       namespace: default
+      sectionName: http
   rules:
     - backendRefs:
         - name: frontend

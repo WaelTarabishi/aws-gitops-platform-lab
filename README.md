@@ -19,7 +19,7 @@ Phase 1:
 - One Kustomize-managed application
 
 Phase 2:
-- Gateway API with AWS ALB controller path
+- AWS Load Balancer Controller and Gateway API path
 - ACM certificate
 - Route53
 - ExternalDNS

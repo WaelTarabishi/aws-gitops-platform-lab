@@ -5,3 +5,4 @@ namespace: boutique-lite-dev
 
 resources:
   - ../../base
+  - httproute.yaml
