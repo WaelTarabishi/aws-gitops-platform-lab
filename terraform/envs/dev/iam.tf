@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "eks_pod_identity_assume_role" {
 }
 
 data "aws_iam_policy_document" "external_dns" {
-  count = local.route53_zone_id != null ? 1 : 0
+  count = local.route53_enabled ? 1 : 0
 
   statement {
     effect = "Allow"
@@ -60,7 +60,7 @@ resource "aws_eks_pod_identity_association" "aws_load_balancer_controller" {
 }
 
 resource "aws_iam_role" "external_dns" {
-  count = local.route53_zone_id != null ? 1 : 0
+  count = local.route53_enabled ? 1 : 0
 
   name               = "${local.name}-external-dns"
   assume_role_policy = data.aws_iam_policy_document.eks_pod_identity_assume_role.json
@@ -68,7 +68,7 @@ resource "aws_iam_role" "external_dns" {
 }
 
 resource "aws_iam_policy" "external_dns" {
-  count = local.route53_zone_id != null ? 1 : 0
+  count = local.route53_enabled ? 1 : 0
 
   name   = "${local.name}-external-dns"
   policy = data.aws_iam_policy_document.external_dns[0].json
@@ -76,14 +76,14 @@ resource "aws_iam_policy" "external_dns" {
 }
 
 resource "aws_iam_role_policy_attachment" "external_dns" {
-  count = local.route53_zone_id != null ? 1 : 0
+  count = local.route53_enabled ? 1 : 0
 
   role       = aws_iam_role.external_dns[0].name
   policy_arn = aws_iam_policy.external_dns[0].arn
 }
 
 resource "aws_eks_pod_identity_association" "external_dns" {
-  count = local.route53_zone_id != null ? 1 : 0
+  count = local.route53_enabled ? 1 : 0
 
   cluster_name    = module.eks.cluster_name
   namespace       = "external-dns"
