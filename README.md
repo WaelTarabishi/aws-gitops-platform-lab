@@ -86,3 +86,48 @@ kubectl apply -f argocd/root-dev.yaml
 ```
 
 `Kustomize` is not a separate manual deployment step in the normal flow. Argo CD renders the Kustomize sources from Git and applies them to the cluster.
+
+## Publishing Boutique Lite Images
+
+The `boutique-lite` workload uses 10 service images. For EKS, those images must be pushed to a registry that the cluster can pull from. A simple default for this repo is GitHub Container Registry under the `WaelTarabishi` account.
+
+Log in to GHCR:
+
+```bash
+echo <GHCR_TOKEN> | docker login ghcr.io -u WaelTarabishi --password-stdin
+```
+
+Build and push all boutique-lite images:
+
+```powershell
+$images = @(
+  "adservice",
+  "cartservice",
+  "checkoutservice",
+  "currencyservice",
+  "emailservice",
+  "frontend",
+  "paymentservice",
+  "productcatalogservice",
+  "recommendationservice",
+  "shippingservice"
+)
+
+$user = "WaelTarabishi"
+$tag = "dev"
+
+foreach ($image in $images) {
+  $target = "ghcr.io/$user/boutique-lite-$image:$tag"
+  docker build -t $target "./src/$image"
+  docker push $target
+}
+```
+
+That publishes images such as:
+
+```text
+ghcr.io/WaelTarabishi/boutique-lite-frontend:dev
+ghcr.io/WaelTarabishi/boutique-lite-adservice:dev
+```
+
+After pushing, update the image references in [`apps/boutique-lite/base`](C:/Users/waelt/Desktop/minimized-devops-project/apps/boutique-lite/base:1) to use the GHCR paths and commit the manifest changes so Argo CD can redeploy the workloads.
