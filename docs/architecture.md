@@ -48,6 +48,13 @@ Argo CD is installed once from outside the repo.
 After Argo CD is available, the root application points to `clusters/dev`.
 That root application then creates the platform and application child applications.
 
+The practical bootstrap sequence is:
+1. Terraform creates AWS infrastructure and EKS.
+2. The operator updates kubeconfig for the new cluster.
+3. The operator installs Argo CD into the `argocd` namespace.
+4. The operator applies `argocd/root-dev.yaml`.
+5. Argo CD syncs `clusters/dev`, which then creates the platform and workload applications.
+
 ## Current Dev Baseline
 
 The current `dev` baseline bootstraps Gateway API CRDs from the cluster entrypoint, installs the AWS Load Balancer Controller in the platform layer, and exposes the sample application through an `HTTPRoute`.
