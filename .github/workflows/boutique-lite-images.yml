@@ -207,7 +207,7 @@ jobs:
           fi
 
           for service in "${services[@]}"; do
-            perl -0pi -e "s|(name: boutique-lite/${service}\s+newName: ghcr\.io/[^\\r\\n]+/boutique-lite-${service}\s+newTag: )[^\\r\\n]+|\${1}$ENV{IMAGE_TAG}|m" apps/boutique-lite/overlays/dev/kustomization.yaml
+            SERVICE="$service" perl -0pi -e 's|(name: boutique-lite/\Q$ENV{SERVICE}\E\s+newName: ghcr\.io/[^\r\n]+/boutique-lite-\Q$ENV{SERVICE}\E\s+newTag: )[^\r\n]+|${1}$ENV{IMAGE_TAG}|m' apps/boutique-lite/overlays/dev/kustomization.yaml
           done
 
       - name: Commit manifest updates
