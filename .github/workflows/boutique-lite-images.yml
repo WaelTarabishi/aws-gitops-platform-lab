@@ -112,7 +112,7 @@ jobs:
                 def docker:
                   if . == "cartservice" then "./src/cartservice/src/Dockerfile" else "./src/" + . + "/Dockerfile" end;
                 def context:
-                  if . == "cartservice" then "./src/cartservice" else "./src/" + . end;
+                  if . == "cartservice" then "./src/cartservice/src" else "./src/" + . end;
                 {include: map({service: ., image: ("ghcr.io/" + env.GITHUB_REPOSITORY_OWNER + "/boutique-lite-" + .), context: context, dockerfile: docker})}
               '
           )"
