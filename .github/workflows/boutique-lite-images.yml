@@ -11,8 +11,25 @@ on:
       - ".github/workflows/boutique-lite-images.yml"
   workflow_dispatch:
     inputs:
+      service:
+        description: "Select one service to build."
+        required: false
+        type: choice
+        default: auto
+        options:
+          - auto
+          - adservice
+          - cartservice
+          - checkoutservice
+          - currencyservice
+          - emailservice
+          - frontend
+          - paymentservice
+          - productcatalogservice
+          - recommendationservice
+          - shippingservice
       services:
-        description: "Comma-separated services to build. Leave empty for auto-detect."
+        description: "Comma-separated services to build. Leave empty unless you need multiple services."
         required: false
         default: ""
       force_all:
@@ -67,8 +84,12 @@ jobs:
 
           selected=()
 
+          selected_service="${{ inputs.service }}"
+
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.force_all }}" == "true" ]]; then
             selected=("${known_services[@]}")
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "$selected_service" && "$selected_service" != "auto" ]]; then
+            selected=("$selected_service")
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.services }}" ]]; then
             IFS=',' read -ra requested <<< "${{ inputs.services }}"
             for raw in "${requested[@]}"; do
