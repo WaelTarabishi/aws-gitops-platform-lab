@@ -13,7 +13,7 @@ images:
     newTag: dev
   - name: boutique-lite/cartservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-cartservice
-    newTag: dev
+    newTag: 7aa4d3c365e1d6b1cc10880d3a27efa7de2033be
   - name: boutique-lite/checkoutservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-checkoutservice
     newTag: dev
