@@ -1,8 +1,8 @@
-﻿apiVersion: kustomize.config.k8s.io/v1beta1
+apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - gateway-api-crds
+  - ../clusters/dev/gateway-api-crds
   - project-platform.yaml
   - project-apps.yaml
   - platform-dev.yaml

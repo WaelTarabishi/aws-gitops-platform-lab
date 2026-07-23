@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/WaelTarabishi/aws-gitops-platform-lab
     targetRevision: HEAD
-    path: clusters/dev
+    path: argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
