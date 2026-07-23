@@ -10,31 +10,31 @@ resources:
 images:
   - name: boutique-lite/adservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-adservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/cartservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-cartservice
-    newTag: 7aa4d3c365e1d6b1cc10880d3a27efa7de2033be
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/checkoutservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-checkoutservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/currencyservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-currencyservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/emailservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-emailservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/frontend
     newName: ghcr.io/WaelTarabishi/boutique-lite-frontend
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/paymentservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-paymentservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/productcatalogservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-productcatalogservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/recommendationservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-recommendationservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/shippingservice
     newName: ghcr.io/WaelTarabishi/boutique-lite-shippingservice
-    newTag: dev
+    newTag: e841d7b8fc851096ea3385a161a49b84164ac292
