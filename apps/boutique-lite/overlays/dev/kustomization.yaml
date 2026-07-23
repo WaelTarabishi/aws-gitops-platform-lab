@@ -6,3 +6,35 @@ namespace: boutique-lite-dev
 resources:
   - ../../base
   - httproute.yaml
+
+images:
+  - name: boutique-lite/adservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-adservice
+    newTag: dev
+  - name: boutique-lite/cartservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-cartservice
+    newTag: dev
+  - name: boutique-lite/checkoutservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-checkoutservice
+    newTag: dev
+  - name: boutique-lite/currencyservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-currencyservice
+    newTag: dev
+  - name: boutique-lite/emailservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-emailservice
+    newTag: dev
+  - name: boutique-lite/frontend
+    newName: ghcr.io/WaelTarabishi/boutique-lite-frontend
+    newTag: dev
+  - name: boutique-lite/paymentservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-paymentservice
+    newTag: dev
+  - name: boutique-lite/productcatalogservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-productcatalogservice
+    newTag: dev
+  - name: boutique-lite/recommendationservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-recommendationservice
+    newTag: dev
+  - name: boutique-lite/shippingservice
+    newName: ghcr.io/WaelTarabishi/boutique-lite-shippingservice
+    newTag: dev

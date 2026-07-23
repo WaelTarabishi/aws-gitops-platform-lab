@@ -91,6 +91,19 @@ kubectl apply -f argocd/root-dev.yaml
 
 The `boutique-lite` workload uses 10 service images. For EKS, those images must be pushed to a registry that the cluster can pull from. A simple default for this repo is GitHub Container Registry under the `WaelTarabishi` account.
 
+The repo includes a GitHub Actions workflow at [`.github/workflows/boutique-lite-images.yml`](C:/Users/waelt/Desktop/minimized-devops-project/.github/workflows/boutique-lite-images.yml:1) with this flow:
+
+- It detects which `src/<service>` directories changed on pushes to `main` or `master`.
+- It builds and pushes only those changed service images to `ghcr.io`.
+- It tags each changed image with the exact pushed commit SHA and updates [`apps/boutique-lite/overlays/dev/kustomization.yaml`](C:/Users/waelt/Desktop/minimized-devops-project/apps/boutique-lite/overlays/dev/kustomization.yaml:1) to that same SHA so Argo CD deploys only the changed service revision.
+- For first-time image publishing, run the workflow manually with `force_all=true`.
+
+GitHub requirements:
+
+- Actions must have `Read and write permissions` so the workflow can commit the updated Kustomize tag file.
+- Packages write access must be enabled for GitHub Container Registry publishing.
+- The workflow uses the repository `GITHUB_TOKEN` for both GHCR and Git pushes.
+
 Log in to GHCR:
 
 ```bash
@@ -130,4 +143,4 @@ ghcr.io/WaelTarabishi/boutique-lite-frontend:dev
 ghcr.io/WaelTarabishi/boutique-lite-adservice:dev
 ```
 
-After pushing, update the image references in [`apps/boutique-lite/base`](C:/Users/waelt/Desktop/minimized-devops-project/apps/boutique-lite/base:1) to use the GHCR paths and commit the manifest changes so Argo CD can redeploy the workloads.
+The base manifests keep stable service image names, and the `dev` overlay rewrites them to GHCR paths in [`apps/boutique-lite/overlays/dev/kustomization.yaml`](C:/Users/waelt/Desktop/minimized-devops-project/apps/boutique-lite/overlays/dev/kustomization.yaml:1). That keeps registry and tag changes isolated to the environment layer.

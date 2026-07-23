@@ -1,0 +1,204 @@
+name: boutique-lite-images
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "src/**"
+      - "apps/boutique-lite/overlays/dev/kustomization.yaml"
+      - ".github/workflows/boutique-lite-images.yml"
+  workflow_dispatch:
+    inputs:
+      services:
+        description: "Comma-separated services to build. Leave empty for auto-detect."
+        required: false
+        default: ""
+      force_all:
+        description: "Build and publish all boutique-lite services."
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: boutique-lite-images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.detect.outputs.matrix }}
+      has_changes: ${{ steps.detect.outputs.has_changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed services
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          known_services=(
+            adservice
+            cartservice
+            checkoutservice
+            currencyservice
+            emailservice
+            frontend
+            paymentservice
+            productcatalogservice
+            recommendationservice
+            shippingservice
+          )
+
+          declare -A allowlist=()
+          for service in "${known_services[@]}"; do
+            allowlist["$service"]=1
+          done
+
+          selected=()
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.force_all }}" == "true" ]]; then
+            selected=("${known_services[@]}")
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.services }}" ]]; then
+            IFS=',' read -ra requested <<< "${{ inputs.services }}"
+            for raw in "${requested[@]}"; do
+              service="$(echo "$raw" | xargs)"
+              [[ -n "$service" && -n "${allowlist[$service]:-}" ]] && selected+=("$service")
+            done
+          else
+            before="${{ github.event.before }}"
+            if [[ -z "$before" || "$before" == "0000000000000000000000000000000000000000" ]]; then
+              before="$(git rev-list --max-count=1 HEAD^ 2>/dev/null || true)"
+            fi
+
+            if [[ -n "$before" ]]; then
+              mapfile -t changed_files < <(git diff --name-only "$before" "${{ github.sha }}" -- src)
+            else
+              mapfile -t changed_files < <(git ls-tree -r --name-only "${{ github.sha }}" -- src)
+            fi
+
+            declare -A seen=()
+            for path in "${changed_files[@]}"; do
+              service="${path#src/}"
+              service="${service%%/*}"
+              if [[ -n "${allowlist[$service]:-}" && -z "${seen[$service]:-}" ]]; then
+                selected+=("$service")
+                seen["$service"]=1
+              fi
+            done
+          fi
+
+          if [[ ${#selected[@]} -eq 0 ]]; then
+            echo 'matrix={"include":[]}' >> "$GITHUB_OUTPUT"
+            echo 'has_changes=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          matrix_json="$(
+            printf '%s\n' "${selected[@]}" \
+              | sort -u \
+              | jq -R . \
+              | jq -cs '
+                def docker:
+                  if . == "cartservice" then "./src/cartservice/src/Dockerfile" else "./src/" + . + "/Dockerfile" end;
+                def context:
+                  if . == "cartservice" then "./src/cartservice" else "./src/" + . end;
+                {include: map({service: ., image: ("ghcr.io/" + env.GITHUB_REPOSITORY_OWNER + "/boutique-lite-" + .), context: context, dockerfile: docker})}
+              '
+          )"
+
+          echo "matrix=$matrix_json" >> "$GITHUB_OUTPUT"
+          echo 'has_changes=true' >> "$GITHUB_OUTPUT"
+
+  build-and-push:
+    needs: detect
+    if: needs.detect.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.image }}
+          tags: |
+            type=raw,value=${{ github.sha }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  update-manifests:
+    needs:
+      - detect
+      - build-and-push
+    if: needs.detect.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update changed image tags
+        shell: bash
+        env:
+          MATRIX_JSON: ${{ needs.detect.outputs.matrix }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          mapfile -t services < <(jq -r '.include[].service' <<< "$MATRIX_JSON")
+          if [[ ${#services[@]} -eq 0 ]]; then
+            exit 0
+          fi
+
+          for service in "${services[@]}"; do
+            perl -0pi -e "s|(name: boutique-lite/${service}\s+newName: ghcr\.io/[^\\r\\n]+/boutique-lite-${service}\s+newTag: )[^\\r\\n]+|\${1}$ENV{IMAGE_TAG}|m" apps/boutique-lite/overlays/dev/kustomization.yaml
+          done
+
+      - name: Commit manifest updates
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- apps/boutique-lite/overlays/dev/kustomization.yaml; then
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/boutique-lite/overlays/dev/kustomization.yaml
+          git commit -m "ci: update boutique-lite image tags"
+          git push

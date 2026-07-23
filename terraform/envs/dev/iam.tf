@@ -46,9 +46,15 @@ resource "aws_iam_role" "aws_load_balancer_controller" {
   tags               = local.common_tags
 }
 
+resource "aws_iam_policy" "aws_load_balancer_controller" {
+  name   = "${local.name}-aws-load-balancer-controller"
+  policy = file("${path.module}/aws-load-balancer-controller-iam-policy.json")
+  tags   = local.common_tags
+}
+
 resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller" {
   role       = aws_iam_role.aws_load_balancer_controller.name
-  policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
+  policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
 }
 
 resource "aws_eks_pod_identity_association" "aws_load_balancer_controller" {

@@ -14,7 +14,6 @@ spec:
       values: |
         clusterName: minimized-devops-dev-eks
         region: us-east-1
-        vpcId: vpc-0a0d1d7863ba3c5a5
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
