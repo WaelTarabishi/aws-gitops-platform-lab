@@ -44,7 +44,31 @@ docs/                  design notes and implementation decisions
 
 The `dev` environment currently exposes the Boutique Lite storefront through the public gateway.
 
-![Boutique Lite storefront running in dev](docs/boutique-lite-homepage.png)
+![Boutique Lite storefront running in dev](docs/boutique-lite-storefront-capture.png)
+
+## Argo CD Screenshots
+
+These screenshots show the deployed applications and resource trees managed by Argo CD in the `dev` environment.
+
+### Applications Dashboard
+
+![Argo CD applications dashboard](docs/argocd-applications-dashboard-capture.png)
+
+### AWS Load Balancer Controller Application
+
+![Argo CD AWS Load Balancer Controller application view](docs/argocd-aws-load-balancer-controller-capture.png)
+
+### ExternalDNS Application
+
+![Argo CD ExternalDNS application view](docs/argocd-external-dns-capture.png)
+
+### Platform Application Tree
+
+![Argo CD platform-dev application tree](docs/argocd-platform-dev-capture.png)
+
+### Root Application Tree
+
+![Argo CD root-dev application tree](docs/argocd-root-dev-capture.png)
 
 ## Infrastructure Screenshots
 
@@ -52,7 +76,7 @@ The following screenshots document the `dev` environment setup from the live AWS
 
 ### ACM Certificate
 
-![ACM certificate status](docs/acm.png)
+![ACM certificate status](docs/acm-certificate-capture.png)
 
 ### Route53 Records
 
