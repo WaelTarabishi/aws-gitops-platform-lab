@@ -64,6 +64,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          export OWNER_LC
+          OWNER_LC="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
+
           known_services=(
             adservice
             cartservice
@@ -134,7 +137,7 @@ jobs:
                   if . == "cartservice" then "./src/cartservice/src/Dockerfile" else "./src/" + . + "/Dockerfile" end;
                 def context:
                   if . == "cartservice" then "./src/cartservice/src" else "./src/" + . end;
-                {include: map({service: ., image: ("ghcr.io/" + env.GITHUB_REPOSITORY_OWNER + "/boutique-lite-" + .), context: context, dockerfile: docker})}
+                {include: map({service: ., image: ("ghcr.io/" + env.OWNER_LC + "/boutique-lite-" + .), context: context, dockerfile: docker})}
               '
           )"
 

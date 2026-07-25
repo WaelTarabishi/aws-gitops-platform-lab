@@ -9,32 +9,32 @@ resources:
 
 images:
   - name: boutique-lite/adservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-adservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-adservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/cartservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-cartservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-cartservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/checkoutservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-checkoutservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-checkoutservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/currencyservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-currencyservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-currencyservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/emailservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-emailservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-emailservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/frontend
-    newName: ghcr.io/WaelTarabishi/boutique-lite-frontend
+    newName: ghcr.io/waeltarabishi/boutique-lite-frontend
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/paymentservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-paymentservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-paymentservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/productcatalogservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-productcatalogservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-productcatalogservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/recommendationservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-recommendationservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-recommendationservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
   - name: boutique-lite/shippingservice
-    newName: ghcr.io/WaelTarabishi/boutique-lite-shippingservice
+    newName: ghcr.io/waeltarabishi/boutique-lite-shippingservice
     newTag: e841d7b8fc851096ea3385a161a49b84164ac292
