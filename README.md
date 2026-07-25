@@ -40,6 +40,28 @@ clusters/              shared cluster-specific assets
 docs/                  design notes and implementation decisions
 ```
 
+## Current Dev Preview
+
+The `dev` environment currently exposes the Boutique Lite storefront through the public gateway.
+
+![Boutique Lite storefront running in dev](docs/boutique-lite-homepage.png)
+
+## Infrastructure Screenshots
+
+The following screenshots document the `dev` environment setup from the live AWS and registrar consoles.
+
+### ACM Certificate
+
+![ACM certificate status](docs/acm.png)
+
+### Route53 Records
+
+![Route53 hosted zone records](docs/route53-hosted-zone-records.png)
+
+### Registrar Nameservers
+
+![Registrar nameserver delegation](docs/registrar-nameserver-delegation.png)
+
 ## Delivery Model
 
 The repo intentionally avoids mixing these models for first-party apps:

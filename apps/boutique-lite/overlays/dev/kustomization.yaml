@@ -6,6 +6,7 @@ namespace: boutique-lite-dev
 resources:
   - ../../base
   - httproute.yaml
+  - frontend-hpa.yaml
 
 images:
   - name: boutique-lite/adservice

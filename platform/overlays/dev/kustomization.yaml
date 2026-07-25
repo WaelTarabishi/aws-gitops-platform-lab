@@ -6,4 +6,5 @@ resources:
   - ../../base/aws-load-balancer-controller
   - ../../base/argocd-route
   - ../../base/external-dns
+  - ../../base/metrics-server
   - ../../base/public-gateway
