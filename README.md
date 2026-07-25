@@ -100,7 +100,7 @@ kubectl apply -f argocd/root-dev.yaml
 
 `Kustomize` is not a separate manual deployment step in the normal flow. Argo CD renders the Kustomize sources from Git and applies them to the cluster.
 
-Terraform remote state for `dev` is expected to use an S3 backend with DynamoDB locking. Backend bootstrap notes are in [`terraform/bootstrap/README.md`](C:/Users/waelt/Desktop/minimized-devops-project/terraform/bootstrap/README.md:1).
+Terraform remote state for `dev` is expected to use an S3 backend with S3 lockfile locking. This repo changed away from the older DynamoDB locking pattern because `dynamodb_table` for the `s3` backend is deprecated. Backend bootstrap notes are in [`terraform/bootstrap/README.md`](C:/Users/waelt/Desktop/minimized-devops-project/terraform/bootstrap/README.md:1).
 
 ## Publishing Boutique Lite Images
 

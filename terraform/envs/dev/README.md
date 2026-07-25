@@ -63,6 +63,11 @@ The real dev values are in `terraform.tfvars`, which Terraform loads automatical
 
 This environment uses an `s3` backend with S3 lockfile locking.
 
+Recommended approach:
+- use S3 for remote state
+- use `use_lockfile = true` for locking
+- do not use the older `dynamodb_table` backend setting for new setup in this repo
+
 Why:
 - S3 stores shared Terraform state remotely
 - the S3 lockfile prevents two applies from modifying the same state at the same time
