@@ -5,12 +5,10 @@ Terraform cannot create its own remote backend in the same state it is about to 
 Create these AWS resources once:
 
 - S3 bucket for Terraform state
-- DynamoDB table for state locking
 
 Example names:
 
 - S3 bucket: `minimized-devops-terraform-state`
-- DynamoDB table: `minimized-devops-terraform-locks`
 
 Recommended bucket settings:
 
@@ -18,10 +16,7 @@ Recommended bucket settings:
 - server-side encryption enabled
 - block public access enabled
 
-Recommended DynamoDB settings:
-
-- partition key `LockID` of type `String`
-
+Reco
 Example AWS CLI commands:
 
 ```bash
@@ -37,12 +32,6 @@ aws s3api put-public-access-block \
   --bucket minimized-devops-terraform-state \
   --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
-aws dynamodb create-table \
-  --table-name minimized-devops-terraform-locks \
-  --attribute-definitions AttributeName=LockID,AttributeType=S \
-  --key-schema AttributeName=LockID,KeyType=HASH \
-  --billing-mode PAY_PER_REQUEST \
-  --region us-east-1
 ```
 
 Then initialize the env:
