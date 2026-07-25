@@ -5,3 +5,5 @@ metadata:
   namespace: default
 spec:
   scheme: internet-facing
+  defaultTargetGroupConfiguration:
+    name: public-gateway-defaults
