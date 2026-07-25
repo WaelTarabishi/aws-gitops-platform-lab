@@ -1,6 +1,6 @@
-﻿.terraform/
+.terraform/
 *.tfstate
 *.tfstate.*
-.terraform.lock.hcl
 terraform.tfvars
+backend.hcl
 bastion-key.pem

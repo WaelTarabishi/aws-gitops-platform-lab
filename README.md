@@ -36,7 +36,7 @@ terraform/             AWS infrastructure
 argocd/                bootstrap and Argo CD applications
 platform/              platform add-ons synced by Argo CD
 apps/                  first-party workloads managed with Kustomize
-clusters/              environment entrypoints for Argo CD root apps
+clusters/              shared cluster-specific assets
 docs/                  design notes and implementation decisions
 ```
 
@@ -68,13 +68,26 @@ Use this order for the `dev` environment:
 2. Update local kubeconfig for the EKS cluster.
 3. Install Argo CD into the cluster.
 4. Apply the root Argo CD application from [`argocd/root-dev.yaml`](C:/Users/waelt/Desktop/minimized-devops-project/argocd/root-dev.yaml:1).
-5. Let Argo CD sync the platform and application child apps from [`clusters/dev/kustomization.yaml`](C:/Users/waelt/Desktop/minimized-devops-project/clusters/dev/kustomization.yaml:1).
+5. Let Argo CD sync the platform and application child apps from [`argocd/kustomization.yaml`](C:/Users/waelt/Desktop/minimized-devops-project/argocd/kustomization.yaml:1).
 
 Example commands:
 
 ```bash
+aws s3api create-bucket \
+  --bucket minimized-devops-terraform-state \
+  --region us-east-1
+
+aws s3api put-bucket-versioning \
+  --bucket minimized-devops-terraform-state \
+  --versioning-configuration Status=Enabled
+
+aws s3api put-public-access-block \
+  --bucket minimized-devops-terraform-state \
+  --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+
 cd terraform/envs/dev
-terraform init
+cp backend.hcl.example backend.hcl
+terraform init -backend-config=backend.hcl
 terraform apply
 
 aws eks update-kubeconfig --region us-east-1 --name minimized-devops-dev-eks
@@ -86,6 +99,8 @@ kubectl apply -f argocd/root-dev.yaml
 ```
 
 `Kustomize` is not a separate manual deployment step in the normal flow. Argo CD renders the Kustomize sources from Git and applies them to the cluster.
+
+Terraform remote state for `dev` is expected to use an S3 backend with DynamoDB locking. Backend bootstrap notes are in [`terraform/bootstrap/README.md`](C:/Users/waelt/Desktop/minimized-devops-project/terraform/bootstrap/README.md:1).
 
 ## Publishing Boutique Lite Images
 
