@@ -5,5 +5,9 @@ metadata:
   namespace: default
 spec:
   scheme: internet-facing
+  listenerConfigurations:
+    - protocolPort: HTTPS:443
+      defaultCertificate: arn:aws:acm:us-east-1:339712858015:certificate/6cc3cbb5-4efb-4fdd-9b70-dea074fad055
+      sslPolicy: ELBSecurityPolicy-2016-08
   defaultTargetGroupConfiguration:
     name: public-gateway-defaults

@@ -21,8 +21,6 @@ spec:
       protocol: HTTPS
       port: 443
       hostname: "*.waeltarabishi-devops.online"
-      tls:
-        mode: Terminate
       allowedRoutes:
         namespaces:
           from: All
