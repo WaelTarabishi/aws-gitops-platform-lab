@@ -156,7 +156,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Trivy against service source
+      - name: Generate Trivy source SARIF
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
@@ -164,7 +164,7 @@ jobs:
           scanners: vuln,misconfig,secret
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          exit-code: 1
+          exit-code: 0
           format: sarif
           output: trivy-source-${{ matrix.service }}.sarif
           limit-severities-for-sarif: true
@@ -176,6 +176,18 @@ jobs:
         with:
           sarif_file: trivy-source-${{ matrix.service }}.sarif
           category: trivy-source-${{ matrix.service }}
+
+      - name: Enforce Trivy source policy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ matrix.context }}
+          scanners: vuln,misconfig,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+          format: table
+          skip-dirs: .git,docs,**/.terraform,**/node_modules,**/bin,**/obj
 
   build-and-push:
     needs:
@@ -219,14 +231,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Trivy against built image
+      - name: Generate Trivy image SARIF
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ matrix.image }}:${{ github.sha }}
           scanners: vuln,secret
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          exit-code: 1
+          exit-code: 0
           format: sarif
           output: trivy-image-${{ matrix.service }}.sarif
           limit-severities-for-sarif: true
@@ -237,6 +249,16 @@ jobs:
         with:
           sarif_file: trivy-image-${{ matrix.service }}.sarif
           category: trivy-image-${{ matrix.service }}
+
+      - name: Enforce Trivy image policy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ matrix.image }}:${{ github.sha }}
+          scanners: vuln,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+          format: table
 
       - name: Push image
         uses: docker/build-push-action@v6
